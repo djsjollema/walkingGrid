@@ -7,6 +7,8 @@ class Player {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+        this.face = ':)';
+        this.faceRot = Math.PI/2;
 
         this.buttons = {
             up: false,
@@ -35,13 +37,17 @@ class Player {
         var speed = 0.1;
         if (this.buttons.left) {
             this.x -= speed;
+            this.faceRot = Math.PI;
         } else if (this.buttons.right) {
             this.x += speed;
+            this.faceRot = Math.PI*2;
         }
         if (this.buttons.up) {
             this.y -= speed;
+            this.faceRot = -Math.PI/2;
         } else if (this.buttons.down) {
             this.y += speed;
+            this.faceRot = Math.PI/2;
         }
 
         this.x = clamp(this.x, 0, 8 * 100 - 1);
@@ -54,6 +60,14 @@ class Player {
         context.arc(this.x, this.y, 5, 0, 2 * Math.PI);
         context.stroke();
         context.fill();
+        // Give the player a face
+        context.save(); // Save the current context state
+        context.translate(this.x, this.y);
+        context.rotate(this.faceRot);
+        context.textAlign = "center";
+        context.fillStyle = "#FFFFFF";
+        context.fillText(this.face,0,3); 
+        context.restore(); // Restore context to what it was before save
     }
 }
 
