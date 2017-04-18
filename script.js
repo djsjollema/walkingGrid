@@ -37,13 +37,17 @@ class Player {
         var speed = 0.1;
         if (this.buttons.left) {
             this.x -= speed;
+            this.faceRot = Math.PI;
         } else if (this.buttons.right) {
             this.x += speed;
+            this.faceRot = Math.PI*2;
         }
         if (this.buttons.up) {
             this.y -= speed;
+            this.faceRot = -Math.PI/2;
         } else if (this.buttons.down) {
             this.y += speed;
+            this.faceRot = Math.PI/2;
         }
 
         this.x = clamp(this.x, 0, 8 * 100 - 1);
