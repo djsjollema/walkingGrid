@@ -7,26 +7,45 @@ class Player {
     constructor(x, y) {
         this.x = x;
         this.y = y;
+
+        this.buttons = {
+            up: false,
+            down: false,
+            left: false,
+            right: false
+        };
         addEventListener('keydown', (evt) => {
-          console.log(evt.keyCode)
             switch (evt.keyCode) {
-                case 37:
-                    this.x -= 2;
-                    break;
-                case 38:
-                    this.y -= 2;
-                    break;
-                case 39:
-                    this.x += 2;
-                    break;
-                case 40:
-                    this.y += 2;
-                    break;
+                case 37: this.buttons.left = true; break;
+                case 38: this.buttons.up = true; break;
+                case 39: this.buttons.right = true; break;
+                case 40: this.buttons.down = true; break;
             }
-        })
+        });
+        addEventListener('keyup', (evt) => {
+            switch (evt.keyCode) {
+                case 37: this.buttons.left = false; break;
+                case 38: this.buttons.up = false; break;
+                case 39: this.buttons.right = false; break;
+                case 40: this.buttons.down = false; break;
+            }
+        });
     }
     update() {
+        var speed = 0.1;
+        if (this.buttons.left) {
+            this.x -= speed;
+        } else if (this.buttons.right) {
+            this.x += speed;
+        }
+        if (this.buttons.up) {
+            this.y -= speed;
+        } else if (this.buttons.down) {
+            this.y += speed;
+        }
 
+        this.x = clamp(this.x, 0, 8 * 100 - 1);
+        this.y = clamp(this.y, 0, 8 * 100 - 1);
     }
 
     draw(context) {
@@ -70,7 +89,7 @@ function init() {
     }
     player = new Player(150, 150);
     player.draw(context);
-    setInterval(animate,100)
+    setInterval(animate,17)
 }
 
 function animate(){
@@ -81,6 +100,8 @@ function animate(){
     } else {
       map[i].state = false;
     }
+    player.update();
+
     map[i].draw(context);
     player.draw(context)
   }
@@ -90,4 +111,8 @@ init();
 
 function findGrid(x,y){
   return Math.floor(y/100)*8 + Math.floor(x/100);
+}
+
+function clamp(x,min,max){
+    return (x < min ? min : (x > max ? max : x));
 }
