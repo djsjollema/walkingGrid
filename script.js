@@ -33,17 +33,21 @@ class Player {
     }
     update() {
         var speed = 0.1;
-        if (this.buttons.left) {
-            this.x -= speed;
-        } else if (this.buttons.right) {
-            this.x += speed;
+        if (!this.buttons.left || !this.buttons.right) {
+            if (this.buttons.left) {
+                this.x -= speed;
+            } else if (this.buttons.right) {
+                this.x += speed;
+            }
         }
-        if (this.buttons.up) {
-            this.y -= speed;
-        } else if (this.buttons.down) {
-            this.y += speed;
+        
+        if (!this.buttons.up || !this.buttons.down) {
+            if (this.buttons.up) {
+                this.y -= speed;
+            } else if (this.buttons.down) {
+                this.y += speed;
+            }
         }
-
         this.x = clamp(this.x, 0, 8 * 100 - 1);
         this.y = clamp(this.y, 0, 8 * 100 - 1);
     }
