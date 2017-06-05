@@ -1,7 +1,7 @@
 var canvas = document.getElementById('canvas');
 var context = canvas.getContext('2d');
 var player;
-var map = [];
+var plane = [];
 
 class Player {
     constructor(x, y) {
@@ -47,11 +47,7 @@ class Bit {
 
     draw(context) {
         context.beginPath();
-        if (this.state) {
-            context.fillStyle = "#ff0000";
-        } else {
-            context.fillStyle = "#00ff00";
-        }
+        context.fillStyle = this.state ? "#ff0000" : "#00ff00";
         context.rect(this.x, this.y, 100, 100);
         context.stroke();
         context.fill();
@@ -66,7 +62,7 @@ function init() {
         var x = (i % numOnRow) * bitWidth;
         var y = Math.floor(i / numOnRow) * bitWidth;
         var bit = new Bit(x, y);
-        map.push(bit);
+        plane.push(bit);
     }
     player = new Player(150, 150);
     player.draw(context);
@@ -75,15 +71,11 @@ function init() {
 
 function animate(){
   context.clearRect(0,0,800,800);
-  for (var i = 0; i < map.length; i++) {
-    if(i == findGrid(player.x,player.y)){
-      map[i].state = true
-    } else {
-      map[i].state = false;
-    }
-    map[i].draw(context);
-    player.draw(context)
-  }
+  plane.map((tile, idx) => {
+    tile.state = idx == findGrid(player.x,player.y)
+    tile.draw(context);
+    player.draw(context)  
+  })
 }
 
 init();
